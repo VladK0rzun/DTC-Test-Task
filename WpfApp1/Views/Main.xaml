@@ -1,0 +1,45 @@
+﻿<Window x:Class="WpfApp1.Views.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:viewmodels="clr-namespace:WpfApp1.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                     Width="200"
+                     Margin="10"/>
+            <Button Content="Search" Command="{Binding SearchCommand}" Margin="10"/>
+            <ComboBox ItemsSource="{Binding ItemCountOptions}"
+                      SelectedItem="{Binding ItemCount}"
+                      HorizontalAlignment="Left" Margin="10" Width="120"/>
+            <Button Content="Convert Currency" Command="{Binding NavigateToConverterCommand}" Margin="10"/>
+            <Button Content="Light Theme" Command="{Binding SwitchToLightThemeCommand}" Margin="10"/>
+            <Button Content="Dark Theme" Command="{Binding SwitchToDarkThemeCommand}" Margin="10"/>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding FilteredCurrencies}" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="All" IsReadOnly="True" Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header="Supply" Binding="{Binding Supply}" Width="*"/>
+                <DataGridTemplateColumn Header="Actions" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="View Details" 
+                                    Command="{Binding DataContext.ShowDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
